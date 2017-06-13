@@ -62,6 +62,12 @@ Browser usage:
 
 > The build process hasn't yet been added, so only the src folder exists at the moment.
 
+## Documentation
+
+For now the documentation can be found here, it is a work in progress, so please bear with me.
+
+[http://codelamp.github.io/intrepid/html/intrepid.html](http://codelamp.github.io/intrepid/html/intrepid.html)
+
 ## Local development
 
 ### Building docs
