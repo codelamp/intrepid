@@ -1,0 +1,33 @@
+{
+  "name": "intrepid",
+  "version": "0.0.1",
+  "description": "A library to help navigate structures: JSON, Objects, DOM or otherwise.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jsdoc": "^3.4.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "make-docs": "./node_modules/.bin/jsdoc './src' -c './docs/conf.json' -d './docs/html' -t './docs/theme/default' -p --debug --pedantic"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/codelamp/intrepid.git"
+  },
+  "keywords": [
+    "json",
+    "object",
+    "navigate",
+    "path"
+  ],
+  "author": "Phil Glanville",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/codelamp/intrepid/issues"
+  },
+  "homepage": "https://github.com/codelamp/intrepid#readme"
+}

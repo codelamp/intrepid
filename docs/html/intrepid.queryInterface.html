@@ -1,0 +1,1552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: queryInterface</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Namespace: queryInterface</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="intrepid.html">intrepid</a>.</span>queryInterface</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>QueryInterface is the base object for any query interfaces.</p>
+<p>This object cannot be used directly as a Query, it has to be extended
+so that its .process method can be defined.</p></div>
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line482">line 482</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+            <h3>Example</h3>
+            
+    <pre class="prettyprint"><code>var simpleQuery = intrepid.queryInterface.extend({
+
+  process: function(selector){
+    var list = [];
+    // cause any non-anchored selector to scan deep
+    if ( selector[0] != '/' ) {
+      selector.unshift('**');
+    }
+    for ( var i=0, a=selector, l=a.length; i&lt;l; i++ ) {
+      this.handleSegment(a[i], list);
+    }
+    return list;
+  },
+
+  handleSegment: function(segment, list){
+    switch ( segment ) {
+      case '**':
+        // this tells the navigator that it can free scan
+        list.push( this.shared.segments.matchAnyAndNone );
+      break;
+      case '*':
+        // this tells the navigator that it can wildcard match any at the current level
+        list.push( this.shared.segments.matchAny );
+      break;
+      case '/':
+        // this tells the navigator that it has to match the next item
+        list.push( this.shared.segments.matchNext );
+      break;
+      case '..':
+        // this tells the navigator to ascend, rather than descend, and match next
+        list.push( this.shared.segments.matchParent );
+        // after going backup, we need to go on down unless told otherwise
+        list.push( this.shared.segments.goDescend );
+      break;
+      case '...':
+        // this tells the navigator to ascend, rather than descend, and match any and none
+        list.push( this.shared.segments.matchAncestor );
+      break;
+      default:
+        switch ( true ) {
+          default:
+            item = function(val, key, par){ return key === segment; };
+            item.toString = function(){
+              return '[SimpleQuery Match ' + segment + ']';
+            };
+            list.push( item );
+            // after a successful match, we should revert back to matchNext and descending
+            list.push( this.shared.segments.matchNext );
+            list.push( this.shared.segments.goDescend );
+          break;
+        }
+      break;
+    }
+  }
+
+});</code></pre>
+
+        
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="intrepid.base.html">intrepid.base</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+        <h3 class="subsection-title">Namespaces</h3>
+
+        <dl>
+            <dt><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></dt>
+            <dd></dd>
+        </dl>
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="this.i"><span class="type-signature">(private) </span>#this.i<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    <p><code>this.i</code> tracks internal information inside the object. There are a few reasons for
+doing this. Please read about object reuse.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>current</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>tracks the current index within <code>this.i.segments</code></p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>segments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the list of segments</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line589">line 589</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isCombination"><span class="type-signature">(static) </span>isCombination<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a combination</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line850">line 850</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isDirective"><span class="type-signature">(static) </span>isDirective<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a directive</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line816">line 816</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".isMatcher"><span class="type-signature">(static) </span>isMatcher<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a matcher</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line833">line 833</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="__andList"><span class="type-signature"></span>__andList<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>AndList</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line604">line 604</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>requires implementation, currently all segments are assumed to be linear,
+and as such are applied one after the other. There needs to be support however for
+parallel items either ANDs or ORs.</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="__orList"><span class="type-signature"></span>__orList<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>OrList</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line617">line 617</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>requires implementation, currently all segments are assumed to be linear,
+and as such are applied one after the other. There needs to be support however for
+parallel items either ANDs or ORs.</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isCombination"><span class="type-signature"></span>##isCombination<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a combianation</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line842">line 842</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isDirective"><span class="type-signature"></span>##isDirective<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a directive</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line808">line 808</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isMatcher"><span class="type-signature"></span>##isMatcher<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Tell if an object is a matcher</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line825">line 825</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="length"><span class="type-signature"></span>length<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get the number of processed segments</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line688">line 688</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="next"><span class="type-signature"></span>next<span class="signature">()</span><span class="type-signature"> &rarr; {function|<a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get the next segment, according to the current internal pointer <code>this.i.current</code></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line670">line 670</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+|
+
+<span class="param-type"><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="prep"><span class="type-signature">(private) </span>prep<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Prepare each instance of queryInterface created by .create()</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line577">line 577</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="process"><span class="type-signature"></span>process<span class="signature">(selector)</span><span class="type-signature"> &rarr; {Array.&lt;(function()|<a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a>)>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The method responsible for processing a selector into segments. Should return an array of</p>
+<p>an example implementation:</p>
+<pre class="prettyprint source"><code>process: function(selector){
+  var list = [];
+  // cause any non-anchored selector to scan deep
+  if ( selector[0] != '/' ) {
+    selector.unshift('**');
+  }
+  for ( var i=0, a=selector, l=a.length; i&lt;l; i++ ) {
+    this.handleSegment(a[i], list);
+  }
+  return list;
+}</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>selector</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">any</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>usually selector is passed as a string, but could be any type
+                        as long as the process function handles converting what it means into segments</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line646">line 646</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;(function()|<a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Reset the internal position within the segments</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line657">line 657</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#each">each</a></li><li><a href="global.html#extend">extend</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#helpers">helpers</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#options">options</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#prepChained">prepChained</a></li><li><a href="global.html#prepCursor">prepCursor</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jun 13 2017 23:48:58 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
