@@ -1,4 +1,3 @@
-// https://d3js.org Version 4.9.1. Copyright 2017 Mike Bostock.
 (function (global, factory) {
   if ( typeof exports === 'object' && typeof module !== 'undefined' ) {
     factory(exports);
