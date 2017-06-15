@@ -129,11 +129,11 @@ A standard create request will still retain shared references (it depends on the
 
     var b = a.create().namespace();
 
-Now `b` should have the parts of its structure that allow change dereferenced. The way the dereferencing is applied, depends on `a's` namespace template. This is an internal object that just highlights the properties that need dereferencing, and how they should be dereferenced. So now, as long as `a` defined `childObject` as a property that needed deref, we should be able to:
+Now `b` should have the parts of its structure that allow change, dereferenced. The way the dereferencing is applied, depends on `a's` namespace template. This is an internal object that just highlights the properties that need dereferencing, and how they should be dereferenced. So now, as long as `a` defined `childObject` as a property that needed deref, we should be able to:
 
     b.childObject.modifyWithoutFear = true;
 
-The namespace operation doesn't have to dereference all shared propertied, just the ones outlined in the namespace template. So it is fully possible to still have shared properties after namespacing.
+The namespace operation doesn't have to dereference all shared properties, just the ones outlined in the namespace template. So it is fully possible to still have shared properties after namespacing.
 
 ## Documentation
 

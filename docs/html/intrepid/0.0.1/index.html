@@ -52,7 +52,7 @@
 <pre class="prettyprint source"><code>&lt;script src=&quot;node_modules/intrepid/src/intrepid.js&quot;>&lt;/script></code></pre><blockquote>
 <p>The build process hasn't yet been added, so only the src folder exists at the moment.</p>
 </blockquote>
-<h2>Example usage</h2><p>I yet to fully develop the API yet, so for now I'm leaving the barebones objects i.e. like <code>intrepid.simpleQuery</code> to be referenced. Later on it should be possible to create an intrepid instance that will have the type of query and data handlers paired together. Making the interface more succinct.</p>
+<h2>Example usage</h2><p>I have yet to fully develop the API yet, so for now I'm leaving the barebones objects i.e. like <code>intrepid.simpleQuery</code> to be referenced. Later on it should be possible to create an intrepid instance that will have the type of query and data handlers paired together. Making the interface more succinct.</p>
 <p>A simpleQuery example:</p>
 <pre class="prettyprint source"><code>var testData = {
   a: {
@@ -77,7 +77,37 @@ var n = intrepid.objNav;
 var o = n.create(testData);
 var s = o.find(q.create('simple/**/to'));</code></pre><p>Both querying languages are similar, but intrepid's design shouldn't prevent different kinds of query languages being developed or appropriated.</p>
 <h2>Extending intrepid</h2><p>This library is designed to be extended, and is built following my theory.js construction, although the theory lib itself has been totally removed as a dependency.</p>
-<p>tbc.</p>
+<h3>Theory objects</h3><p>Theory doesn't use constructors or classes generally, instead namespaces are built up as extended and mixed in objects using <code>Object.create</code> and <code>Object.assign</code>.</p>
+<p>Over the years I've come to prefer this approach for a few reasons:</p>
+<ol>
+<li>Simplicity — everything is an object, not a complex/js-particular type that requires special syntax</li>
+<li>Openness — in JavaScript, at least the level I code at, there is no point in private/inaccessible structures</li>
+<li>Extensibility — Objects are easy to inspect, extend and mix</li>
+<li>Portability — if your structure is mainly an object, it can easily be ported between languages</li>
+</ol>
+<p>This approach is not without its issues and gotchas however.</p>
+<h4>Shared references</h4><p>One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to. For example, in PHP, you could have:</p>
+<pre class="prettyprint source"><code>class Test {
+  $list = []
+}</code></pre><p>As you create instances of <code>Test</code>, each one will have a <code>-&gt;list</code> property, but each list property is unique — basically a new array is created each time. Now using <code>Object.create()</code>:</p>
+<pre class="prettyprint source"><code>var Test = {
+  list: []
+};</code></pre><p>Whenever you create a new instance <code>Object.create(Test)</code> the list is the same array, and will be shared between instances. This distinct behavioural difference can cause unexpected side-effects if you aren't aware.</p>
+<p>Theory, and Intrepid, get around this issue by either re-defining properties for each newly created instance, or using a system it refers to as namespace.</p>
+<h4>.namespace()</h4><p>I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its &quot;key&quot; references are de-referenced.</p>
+<p>&quot;de-referencing&quot; doesn't mean items no longer have a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that &quot;same&quot; object but a different reference.</p>
+<p>The reason for doing this can be summed up more easily with an example:</p>
+<pre class="prettyprint source"><code>var a = {
+  childObject: {
+    with: &quot;its own reference&quot;
+  }
+};
+var b = Object.create(a);</code></pre><p>With the above construction, I can happily add properties to <code>b</code> without fear of changing <code>a</code>. Because <code>b</code> is its own object (own reference) that inherits from <code>a</code>.</p>
+<pre class="prettyprint source"><code>b.hereYouGo = 'Thanks!';</code></pre><p>It is a different story however if I try an modify <code>b.childObject</code>. This is a shared reference between <code>a</code> and <code>b</code>. It is the same object.</p>
+<pre class="prettyprint source"><code>b.childObject.dontShareThis = 'hmmm.';</code></pre><p>If we imagine that <code>a</code> is a constructor following the theory design, it will have <code>.create()</code> and <code>.namespace()</code> methods.</p>
+<pre class="prettyprint source"><code>var b = a.create();</code></pre><p>A standard create request will still retain shared references (it depends on the constructors behaviour), because shared refs save resources and can be useful. You also aren't usually creating an instance only to change its internal structure. You normally only do this if you are aiming to create a new constructor. So, if we were planning for <code>b</code> to be a new modified version of <code>a</code>, we can do the following:</p>
+<pre class="prettyprint source"><code>var b = a.create().namespace();</code></pre><p>Now <code>b</code> should have the parts of its structure that allow change, dereferenced. The way the dereferencing is applied, depends on <code>a's</code> namespace template. This is an internal object that just highlights the properties that need dereferencing, and how they should be dereferenced. So now, as long as <code>a</code> defined <code>childObject</code> as a property that needed deref, we should be able to:</p>
+<pre class="prettyprint source"><code>b.childObject.modifyWithoutFear = true;</code></pre><p>The namespace operation doesn't have to dereference all shared properties, just the ones outlined in the namespace template. So it is fully possible to still have shared properties after namespacing.</p>
 <h2>Documentation</h2><p>For now the documentation can be found here, it is a work in progress, so please bear with me.</p>
 <p><a href="http://codelamp.github.io/intrepid">http://codelamp.github.io/intrepid</a></p>
 <h2>Local development</h2><h3>Building docs</h3><p>The documentation is powered by jsdoc, so you will need to install the dev dependencies via npm. Once that's done, you can build using:</p>
@@ -98,7 +128,7 @@ var s = o.find(q.create('simple/**/to'));</code></pre><p>Both querying languages
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 01:03:33 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 01:54:30 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>
