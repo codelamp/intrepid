@@ -16,7 +16,6 @@
 <body>
 
 <div id="main">
-
     <h1 class="page-title">Namespace: targetReference</h1>
 
     
@@ -74,7 +73,7 @@ this is why we wrap each target in a targetReference instance.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1136">line 1136</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1159">line 1159</a>
     </li></ul></dd>
     
 
@@ -130,10 +129,10 @@ this is why we wrap each target in a targetReference instance.</p></div>
 
 <div class="description">
     <p>The helpers collection can be seen as a group of external dependencies.</p>
-<p>They are objects that the targetReference contructor relies on.</p>
+<p>They are objects that the targetReference constructor relies on.</p>
 <p>They can be easily overridden on a per namespace basis. For example:</p>
 <pre class="prettyprint source"><code>myNav = intrepid.namespace();
-myNav.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>By namespacing you keep your changes from affecting the global object.</p>
+myNav.helpers.cursorObject.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>By namespacing you keep your changes from affecting the global object.</p>
 </div>
 
 
@@ -256,7 +255,7 @@ myNav.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>B
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1185">line 1185</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1208">line 1208</a>
     </li></ul></dd>
     
 
@@ -334,7 +333,7 @@ myNav.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>B
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1215">line 1215</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1238">line 1238</a>
     </li></ul></dd>
     
 
@@ -416,7 +415,7 @@ myNav.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>B
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1197">line 1197</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1220">line 1220</a>
     </li></ul></dd>
     
 
@@ -458,13 +457,13 @@ myNav.helpers.dataHandlers = &lt;replacement object goes here>;</code></pre><p>B
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#each">each</a></li><li><a href="global.html#extend">extend</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#helpers">helpers</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#options">options</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#prepChained">prepChained</a></li><li><a href="global.html#prepCursor">prepCursor</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Tue Jun 13 2017 23:48:58 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jun 14 2017 15:55:45 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

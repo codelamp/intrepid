@@ -32,18 +32,34 @@ body { height: 100%; padding: 0; margin: 0; }
 .no-js-msg a:hover {
   text-decoration: underline;
 }
+.proimage {
+  max-width: 1224px;
+  position: relative;
+  overflow: hidden;
+}
+.proimage .ratio-holder {
+  padding-bottom: 52%;
+  border: 1px solid red;
+}
+.proimage .bg {
+  width: 100%;
+  height: auto;
+}
 .proimage img {
   transition: opacity 0.5s;
+  
 }
 center {
   height: 100%;
 }
 main {
+  overflow: hidden;
   min-height: 100%;
   max-width: 1224px;
   background: #fff;
 }
 section#fore {
+  overflow: hidden;
   position: relative;
   top: -22px;
   z-index: 100;
@@ -51,16 +67,20 @@ section#fore {
   max-width: 1024px;
   min-height: 500px;
   box-shadow: 0 0 60px 2px rgba(0,0,0,0.5);
-}
-section#fore {
   text-align: left;
   font-family: sans-serif;
   color: #000;
   text-decoration: none;
   font-size: 1em;
+  margin-bottom: -90px;
 }
 .padding {
   padding: 4em;
+}
+#logo,
+#shift {
+  position: relative;
+  top: 0;
 }
 .tagline {
   position: absolute;
@@ -91,6 +111,39 @@ section#fore {
 .strike {
   text-decoration: line-through;
 }
+.js--slide-in-target {
+  opacity: 0;
+  transform: translate3D(0,100px,0);
+  transition: transform 0.5s, opacity 0.5s;
+}
+.action--slide-in {
+  transform: translate3D(0,0,0);
+  opacity: 1;
+}
+
+@media (max-width:900px) {
+  .tagline {
+    top: 50%;
+  }
+  
+  #logo {
+    width: 400px;
+    height: auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .tagline {
+    top: 42%;
+  }
+  
+  #logo {
+    width: 300px;
+    height: auto;
+    margin-top: 10% !important;
+  }
+}
+
 </style>
 <script>
 function proimage (img){
@@ -104,23 +157,26 @@ function proimage (img){
 <body>
 <center>
   <main>
-    <div class="proimage" style="width: 1224px; height: 644px; position: relative; overflow: hidden;">
-      <img src="graphics/header-fast.jpg" width="1224" height="644" alt="Header Fast" style="filter: blur(10px)"
-      ><img src="graphics/header-best.jpg" width="1224" height="644" alt="Header Fast" style="position: absolute; left: 0; top: 0; opacity: 0;" onload="proimage(this);">
-      <img src="graphics/logo.png" width="538" height="93" alt="Logo" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 180px auto;">
-      <div class="tagline">
+    <div class="proimage">
+      <div class="ratio-holder"></div>
+      <img class="bg" src="graphics/header-fast.jpg" width="1224" height="644" alt="Header Fast" style="position: absolute; left: 0; top: 0; filter: blur(10px);"
+      ><img class="bg" src="graphics/header-best.jpg" width="1224" height="644" alt="Header Fast" style="position: absolute; left: 0; top: 0; opacity: 0;" onload="proimage(this);">
+      <img id="logo" class="js--slide-in-target" src="graphics/logo.png" width="538" height="93" alt="Logo" style="position: absolute; left: 0; top: 0; right: 0; bottom: 0; margin: 14% auto;">
+      <div class="tagline js--slide-in-target">
         <center>
-          <p>Navigate HTML, JSON and bespoke structures, out of the box</p>
-          <ul>
-            <li>&bullet; No dependencies</li>
-            <li>&bullet; Small (15kb .min.js)</li>
-            <li>&bullet; No need for transpilers</li>
-            <li>&bullet; Designed to compile</li>
-            <li>&bullet; Parent &amp; ancestor selectors</li>
-            <li>&bullet; Maintains source references</li>
-            <li>&bullet; Code your own data handlers</li>
-            <li class="strike">&bullet; Machine washable</li>
-          </ul>
+          <div id="shift">
+            <p>Navigate HTML, JSON and bespoke structures, out of the box</p>
+            <ul>
+              <li>&bullet; No dependencies</li>
+              <li>&bullet; Small (15kb .min.js)</li>
+              <li>&bullet; No need for transpilers</li>
+              <li>&bullet; Designed to compile</li>
+              <li>&bullet; Parent &amp; ancestor selectors</li>
+              <li>&bullet; Maintains source references</li>
+              <li>&bullet; Code your own data handlers</li>
+              <li class="strike">&bullet; Machine washable</li>
+            </ul>
+          </div>
         </center>
       </div>
     </div>
@@ -137,19 +193,44 @@ function proimage (img){
         <p>Intrepid breaks these into two systems, the QueryInterface and the Navigator. It also makes sure that when navigating objects, you can still reference the original items. Many object navigators out there only allow you to access a copy of the data, this means making alterations to the source data is more awkward. Considering I wrote Intrepid to integrate with Mechanism.js — not being able to access the actual data refs would be useless.</p>
         <p>What also makes this different from my previous approaches is that each targetted item of data gets wrapped with its own handler. Meaning that you can have a collection of different data items all navigated using the same Query Language.</p>
         <p>This documentation is very much work in progress — I've put the repo, entire site and docs together in less that a day — so please check back later for improvements.</p>
-        <p><a href="http://codelamp.github.io/intrepid">http://codelamp.github.io/intrepid</a></p>
+        <p><a href="http://codelamp.github.io/intrepid">http://codelamp.github.io/intrepid/html/intrepid/0.0.1</a></p>
       </div>
     </section>
   </main>
 </center>
 <script>
-var f = document.getElementById('fore');
-window.addEventListener('scroll', function(e){
-  var s = document.body.scrollTop;
-  if ( s < 100 ) {
-    f.style.top = (-22 + (-42 * s/100)) + 'px';
+(function(){
+  var 
+    fo = document.getElementById('fore'),
+    sh = document.getElementById('shift'),
+    lo = document.getElementById('logo'),
+    ps = 300, wasLess = true
+  ;
+  if ( document.getElementsByClassName && lo.classList ) {
+    setTimeout(function(){
+      var si = document.getElementsByClassName('js--slide-in-target');
+      for ( var i=0; i<si.length; i++ ) {
+        si[i].classList.add('action--slide-in');
+      }
+    }, 500);
   }
-});
+  window.addEventListener && 
+  window.addEventListener('scroll', function(e){
+    var s = document.body.scrollTop || document.documentElement.scrollTop || 0;
+    if ( s < ps ) {
+      fo.style.top = (-22 + (-82 * s/300)) + 'px';
+      sh.style.top = (s/ps * -30) + 'px';
+      lo.style.top = (s/ps * -50) + 'px';
+      wasLess = true;
+    }
+    else if ( wasLess ) {
+      wasLess = false;
+      fo.style.top = (-22 + (-82)) + 'px';
+      sh.style.top = (-30) + 'px';
+      lo.style.top = (-50) + 'px';
+    }
+  });
+})();
 </script>
 </body>
 </html>

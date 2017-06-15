@@ -1,3 +1,27 @@
+/*
+Intrepid v0.0.1 - Copyright Phil Glanville 2017
+
+Example usuage:
+
+    var testData = {
+     a: {
+       simple: {
+         object: {
+           to: 'traverse'
+         },
+         to: {
+           give: {
+             an: 'example'
+           }
+         }
+       }
+     }
+   };
+   var q = intrepid.simpleQuery; // ref simpleQuery for reuse
+   var n = intrepid.objNav;      // ref objNav to navigate normal js objects
+   var o = n.create(testData);   // create a new instance of objNav for particular data
+   var s = o.find(q.create(['simple', '**', 'to'])).log(); // run a query and log to console
+*/
 (function (global, factory) {
   if ( typeof exports === 'object' && typeof module !== 'undefined' ) {
     factory(exports);
@@ -1167,12 +1191,12 @@ intrepid.targetReference = intrepid.base.extend({
   /**
    * The helpers collection can be seen as a group of external dependencies.
    *
-   * They are objects that the targetReference contructor relies on.
+   * They are objects that the targetReference constructor relies on.
    *
    * They can be easily overridden on a per namespace basis. For example:
    *
    *     myNav = intrepid.namespace();
-   *     myNav.helpers.dataHandlers = <replacement object goes here>;
+   *     myNav.helpers.cursorObject.helpers.dataHandlers = <replacement object goes here>;
    *
    * By namespacing you keep your changes from affecting the global object.
    *
@@ -1445,36 +1469,43 @@ intrepid.uniqueList = intrepid.base.extend({
 });
 
 /**
- * Relationships between helper entities needs to maintained in a relative
- * manor. There should be no global references between. Also, from recent
- * reading it is best to maintain data at the top level, rather than with
- * lower entities. So here it should be that Navigation holds references
- * to configuration that targetRef may use.
+ * The Cursor layer maintains tracking the data references so that the
+ * top level intrepid API can focus on how to navigate.
  *
- * +-------------------------------+
- * | Navigation                    |
- * | +---------------------------+ |
- * | | Cursor                    | |
- * | | +-----------+-----------+ | |
- * | | | targetRef | targetRef | | |
- * | | +-----------+-----------+ | |
- * | +---------------------------+ |
- * +-------------------------------+
+ * ##### Layers
+ *
+ * Relationships between helper entities needs to be maintained in a relative
+ * manor. There should be no global or top level references. This then allows
+ * each layer to switch out what it is using.
+ *
+ * Each layer maintains references to the next, by way of its helpers.
+ *
+ *     +--------------------------------------------------+
+ *     | Intrepid instance                                |
+ *     | +----------------------------------------------+ |
+ *     | | CursorObject                                 | |
+ *     | | +-----------------+-----------------+--------| |
+ *     | | | targetReference | targetReference | targetR| |
+ *     | | | +-------------+ | +-------------+ | +------| |
+ *     | | | | dataHandler | | | dataHandler | | | dataH| |
+ *     | | | +-------------+ | +-------------+ | +------| |
+ *     | | +-----------------------------------+--------| |
+ *     | +----------------------------------------------+ |
+ *     +-------------------------------------------------+
  *
  * This means however, that when there is a change in information. The
  * lower entities need to update. Rather than update however, it might
  * be best that the lower entities are just always referencing the
  * parent.
- */
-
-/**
+ *
  * @namespace intrepid.cursorObject
  * @memberof intrepid
  */
 intrepid.cursorObject = intrepid.base.extend({
 
   /**
-   *
+ * @namespace intrepid.cursorObject
+ * @memberof intrepid
    */
   shared: {
     namespaceTemplate: {
@@ -1666,22 +1697,36 @@ intrepid.cursorObject = intrepid.base.extend({
 });
 
 /**
+ * The actual instance creator for intrepid, when calling intrepid() the
+ * .create method of this object is called.
  *
+ * @namespace intrepid.instance
+ * @memberof intrepid
  */
 intrepid.instance = intrepid.base.extend({
 
   /**
-   * The shared object is shared between all instances of intrepid.instance
+   * Shared object across all intrepid instances of the same namespace
+   *
+   * @namespace intrepid.instance.shared
+   * @memberof intrepid
+   *
+   * @property {Object} namespaceTemplate is used when creating a safe clone of this
+   *                    object using .namespace() - the newly created object can then
+   *                    be modified without fear of affecting other instances where it matters.
+   *                    This template object should be extended (or replaced) if you 
+   *                    extend intrepid.instance, so that new namespaces know what references
+   *                    need to be unique.
    */
   shared: {
-    // namespaceTemplate is used when creating a safe clone of this
-    // object using .namespace() - the newly created object can then
-    // be modified without fear of changing other instances.
     namespaceTemplate: {
       shared: {
         namespaceTemplate: {}
       },
       helpers: {
+        queryInterface: function(o){
+          return o.namespace();
+        },
         cursorObject: function(o){
           return o.namespace();
         }
@@ -1689,16 +1734,38 @@ intrepid.instance = intrepid.base.extend({
     }
   },
 
-  /**
-   * An instance of intrepid requires a cursor handler
-   */
+ /**
+  * The helpers collection can be seen as a group of external dependencies.
+  *
+  * They are objects that the intrepid constructor relies on.
+  *
+  * They can be easily overridden on a per namespace basis. For example:
+  *
+  *     myNav = intrepid.namespace();
+  *     myNav.helpers.queryInterface = <replacement object goes here>;
+  *
+  * By namespacing you keep your changes from affecting the global object.
+  *
+  * Obviously, if you'd like to affect the global object, you can skip the `.namespace()` call, although this is ill-advised.
+  *
+  * @memberof intrepid.instance
+  * @namespace intrepid.instance.helpers
+  * @property {intrepid.queryInterface} queryInterface - the base interface used to create query interfaces
+  * @property {intrepid.cursorObject} cursorObject - the object used to track internal data references
+  */
   helpers: {
     queryInterface: intrepid.queryInterface,
     cursorObject: intrepid.cursorObject
   },
 
   /**
-   * After .create(), prep is called to actually do the set-up
+   * Prepare each instance created by .create()
+   *
+   * @memberof intrepid.instance
+   * @instance
+   * @chainable
+   * @private
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
    */
   prep: function(target, options){
     this.i = {};
@@ -1710,8 +1777,13 @@ intrepid.instance = intrepid.base.extend({
   /**
    * Prep our internal cursor that will keep track of our targets
    * The cursor must always be a unique instance, so that when
-   * setting .nav() or .target() we do not affect other cursors
-   * elsewhere.
+   * setting `.target()` we do not affect other cursors elsewhere.
+   *
+   * @memberof intrepid.instance
+   * @instance
+   * @chainable
+   * @private
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
    */
   prepCursor: function(target){
     if ( this.helpers.cursorObject.isPrototypeOf(target) ) {
@@ -1720,11 +1792,18 @@ intrepid.instance = intrepid.base.extend({
     else if ( target ) {
       this.i.cursor = this.helpers.cursorObject.create().target(target);
     }
+    return this;
   },
 
   /**
    * The chained object allows properties set on a previous instance
    * follow on down the chain, to another chained instance.
+   *
+   * @memberof intrepid.instance
+   * @instance
+   * @chainable
+   * @private
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
    */
   prepChained: function(options){
     var chained = this.i.chained = this.i.chained ? go.derefAssign(this.i.chained) : {};
@@ -1745,15 +1824,28 @@ intrepid.instance = intrepid.base.extend({
    * not dereference that cursor. So if providing a cursor, make sure to
    * handle the dereferencing yourself.
    *
-   * @param target - the target object to select, or an instance of `helpers.cursorObject`
+   * @param target {any|intrepid.cursorObject} - the target object to select, or an instance of `helpers.cursorObject`
+   *
+   * @memberof intrepid.instance
    * @chainable
+   * @instance
+   * @returns {intrepid.instance} a new instance of `intrepid.instance`
    */
   chain: function(target){
     return this.create(target !== undefined ? target : this.i.cursor.chain());
   },
 
   /**
+   * Extend this object with further properties and return a new instance
    *
+   * @param {Object} prop - an object of properties to merge in
+   *
+   * @todo .chained needs to be handled, and currently isn't
+   *
+   * @memberof intrepid.instance
+   * @chainable
+   * @instance
+   * @returns {intrepid.instance} a new instance of `intrepid.instance`
    */
   extend: function(props){
     var instance = Object.assign(Object.create(this), props || {});
@@ -1763,7 +1855,24 @@ intrepid.instance = intrepid.base.extend({
   },
 
   /**
+   * Merge in addition options
    *
+   * @todo: go.merge is defunct at the moment, because it is quite
+   * large to import. It might be better to use Object.assign with a
+   * poylfill.
+   *
+   * @param {Object} options - an object of properties
+   *
+   * @memberof intrepid.instance
+   * @chainable
+   * @instance
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
+   *//**
+   * Retrieve the current options object
+   *
+   * @returns {Object} the collected options in object form
+   * @memberof intrepid.instance
+   * @instance
    */
   options: function(){
     if ( arguments.length ) {
@@ -1776,8 +1885,10 @@ intrepid.instance = intrepid.base.extend({
   },
 
   /**
-   * @return {Object} the current `intrepid.instance`
+   * @memberof intrepid.instance
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
    * @chainable
+   * @instance
    */
   each: function(callback, context){
     this.i.cursor.each.apply(this.i.cursor, arguments);
@@ -1785,16 +1896,20 @@ intrepid.instance = intrepid.base.extend({
   },
 
   /**
-   * @return {Object} a new instance of `intrepid.instance`
+   * @memberof intrepid.instance
+   * @returns {intrepid.instance} a new instance of `intrepid.instance`
    * @chainable
+   * @instance
    */
   children: function(filter){
     return this.chain(this.i.cursor.children(filter));
   },
 
   /**
-   * @return {Object} a new instance of `intrepid.instance`
+   * @memberof intrepid.instance
+   * @returns {intrepid.instance} a new instance of `intrepid.instance`
    * @chainable
+   * @instance
    */
   parent: function(filter){
     return this.chain(this.i.cursor.parent(filter));
@@ -1931,6 +2046,9 @@ intrepid.instance = intrepid.base.extend({
  *
  * This filter functions are then applied one by one to the targets
  * identified by the navigation code.
+ *
+ * @namespace intrepid.simpleQuery
+ * @memberof intrepid
  */
 intrepid.simpleQuery = intrepid.queryInterface.extend({
 
@@ -2142,21 +2260,3 @@ intrepid.objNav = intrepid().config().dataHandlers('obj').disallowDuplicates().e
 return (exports.intrepid = intrepid);
 
 }))); // end export
-
-/**
- * Example implementation
- */
-
-//var domNav = intrepid().config().dataHandlers('dom').disallowDuplicates().endConfig();
-/*
-var log = function(){
-  console.log.apply(console, arguments);
-};
-
-var objNav = intrepid().config().dataHandlers('obj').disallowDuplicates().endConfig();
-
-var q = simpleQuery.create(['definitions', '**', '@', 'x']);
-var n = objNav.create(testData);
-
-log( n.find(q).get() );
-*/

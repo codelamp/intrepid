@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Namespace: helpers</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    <h1 class="page-title">Namespace: helpers</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="intrepid.html">intrepid</a><a href="intrepid.instance.html">.instance</a>.</span>helpers</h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"><p>The helpers collection can be seen as a group of external dependencies.</p>
+<p>They are objects that the intrepid constructor relies on.</p>
+<p>They can be easily overridden on a per namespace basis. For example:</p>
+<pre class="prettyprint source"><code>myNav = intrepid.namespace();
+myNav.helpers.queryInterface = &lt;replacement object goes here>;</code></pre><p>By namespacing you keep your changes from affecting the global object.</p>
+<p>Obviously, if you'd like to affect the global object, you can skip the <code>.namespace()</code> call, although this is ill-advised.</p></div>
+        
+
+        
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>queryInterface</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the base interface used to create query interfaces</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cursorObject</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>the object used to track internal data references</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1737">line 1737</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Wed Jun 14 2017 15:55:45 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -4,7 +4,7 @@ var self = this;
 ?>
 
 <?js if (data.kind === 'package') { ?>
-    <h3><?js= data.name ?> <?js= data.version ?></h3>
+    <span class="version">Documentation for v <?js= data.version ?></span>
 <?js } ?>
 
 <?js if (data.readme) { ?>
