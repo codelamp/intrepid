@@ -75,13 +75,29 @@ Over the years I've come to prefer this approach for a few reasons:
 1. Simplicity — everything is an object, not a complex/js-particular type that requires special syntax
 2. Openness — in JavaScript, at least the level I code at, there is no point in private/inaccessible structures
 3. Extensibility — Objects are easy to inspect, extend and mix
-4. Portability — if you structure is mainly an object, it can easily be ported between languages
+4. Portability — if your structure is mainly an object, it can easily be ported between languages
 
-This approach is not without its issues and gotchas however. One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to.
+This approach is not without its issues and gotchas however.
+
+#### Shared references
+
+One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to. For example, in PHP, you could have:
+
+    class Test {
+      $list = []
+    }
+
+As you create instances of `Test`, each one will have a `->list` property, but each list property is unique — basically a new array is created each time. Now using `Object.create()`:
+
+    var Test = {
+      list: []
+    };
+
+Whenever you create a new instance `Object.create(Test)` the list is the same array, and will be shared between instances. This distinct behavioural difference can cause unexpected side-effects if you aren't aware.
 
 Theory, and Intrepid, get around this issue by using a system it refers to as namespace. I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its "key" references are de-referenced.
 
-"de-referencing" doesn't mean items no longer has a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that "same" object but a different reference.
+"de-referencing" doesn't mean items no longer have a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that "same" object but a different reference.
 
 The reason for doing this can be summed up more easily with an example:
 
