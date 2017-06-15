@@ -72,7 +72,7 @@ tbc.
 
 For now the documentation can be found here, it is a work in progress, so please bear with me.
 
-[http://codelamp.github.io/intrepid/html](http://codelamp.github.io/intrepid/html/intrepid/0.0.1/index.html)
+[http://codelamp.github.io/intrepid](http://codelamp.github.io/intrepid)
 
 ## Local development
 
