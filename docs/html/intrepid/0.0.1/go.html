@@ -100,6 +100,378 @@
     
 
     
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id=".deref"><span class="type-signature">(private, static) </span>deref<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Internal method used by <code>go.deref</code> and <code>go.derefAssign</code> to follow a dereference template</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line260">line 260</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".deref"><span class="type-signature">(static) </span>deref<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>In numerous instances it is a good idea to keep references to objects
+but you may want to extend those objects. Deref does that by using
+Object.create to create wrapped versions of those objects, so that
+earlier properties are kept on the prototype chain, and new properties
+remain local.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line302">line 302</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".derefAssign"><span class="type-signature">(static) </span>derefAssign<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>By default deref uses Object.create() to dereference, but this can
+cause issues if the objects you are using relies on any Own property methods.
+In this case, use derefAssign, which instead of using the prototype chain,
+uses Object.assign to create entirely new objects.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line320">line 320</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".walk"><span class="type-signature">(static) </span>walk<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Given an object and a callback, the callback will be fired for each key/value that
+the walk operation can reach.</p>
+<p>Because this function has so many abilities I'll list them here:</p>
+<ul>
+<li><p>Walk will call your callback in hierarchy order</p>
+<ul>
+<li>the walk callback will receive [value, key, level, path, userdata] as arguments</li>
+<li>when proxying walk callback will receive [value, proxyValue, key, level, path, userdata]</li>
+<li>if your callback returns false, walking will halt, and the overall operation returns false</li>
+<li>if your callback returns a function, it will be called after all sub-elements (below the
+current level) have been processed. This has the affect of triggering in reverse-hierarchy order.</li>
+</ul>
+</li>
+<li><p>You can control to what depth the walk operation occurs by passing the deep param:</p>
+<ul>
+<li>deep as a number will recurse that many levels in.</li>
+<li>deep as boolean true will recurse as deep as possible.</li>
+<li>deep as a function will be treated as a callback to test if we can travel deeper.</li>
+<li>deep callback will receive [value, key, level, path, userdata] as arguments</li>
+<li>when proxying deep callback will receive [value, proxyValue, key, level, path, userdata]</li>
+</ul>
+</li>
+<li><p>If you pass a proxy object, this object will be stepped along with the same structure as obj.</p>
+<ul>
+<li>All calls to callbacks will receive the found proxy subelement for the current point (or undefined)</li>
+</ul>
+</li>
+<li><p>All callbacks receive a path parameter, which is an array of all the keys up to the current point.</p>
+</li>
+<li>All callbacks will receive the same userdata param, if you pass it in.</li>
+</ul>
+<blockquote>
+<p>WARNING: There is no protection against recursive loops.</p>
+</blockquote>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line154">line 154</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
 
     
 
@@ -120,7 +492,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 14:31:35 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 14:36:00 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>
