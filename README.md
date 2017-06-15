@@ -95,7 +95,12 @@ As you create instances of `Test`, each one will have a `->list` property, but e
 
 Whenever you create a new instance `Object.create(Test)` the list is the same array, and will be shared between instances. This distinct behavioural difference can cause unexpected side-effects if you aren't aware.
 
-Theory, and Intrepid, get around this issue by using a system it refers to as namespace. I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its "key" references are de-referenced.
+Theory, and Intrepid, get around this issue by either re-defining properties for each newly created instance, or using a system it refers to as namespace.
+
+
+#### .namespace()
+
+I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its "key" references are de-referenced.
 
 "de-referencing" doesn't mean items no longer have a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that "same" object but a different reference.
 
@@ -110,7 +115,7 @@ The reason for doing this can be summed up more easily with an example:
 
 With the above construction, I can happily add properties to `b` without fear of changing `a`. Because `b` is its own object (own reference) that inherits from `a`.
 
-    a.hereYouGo = 'Thanks!';
+    b.hereYouGo = 'Thanks!';
 
 It is a different story however if I try an modify `b.childObject`. This is a shared reference between `a` and `b`. It is the same object.
 
