@@ -37,7 +37,7 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Data handlers allow the intrepid system to intrepid different structures</p></div>
+            <div class="description"><p>Data handlers allow the intrepid system to navigate different structures</p></div>
         
 
         
@@ -72,7 +72,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line949">line 949</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line970">line 970</a>
     </li></ul></dd>
     
 
@@ -119,7 +119,7 @@
 
     
 
-    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="add"><span class="type-signature"></span>add<span class="signature">(name, weight, obj)</span><span class="type-signature"></span></h4>
 
     
 
@@ -135,6 +135,101 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>weight</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -170,7 +265,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1078">line 1078</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1116">line 1116</a>
     </li></ul></dd>
     
 
@@ -224,6 +319,269 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="choose"><span class="type-signature"></span>choose<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>A join is a special intrepid object that describes the link between two
+objects. Usually used for parent-&gt;child relationships. You can access the
+properties of a join using .from() .by() and .to() - in parent-&gt;child
+from() would be the parent, by() would be the key, and to() would be the child.</p>
+<p>This is only required to be used if the datastructre you are parsing
+has no official concept of parent-&gt;child.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1068">line 1068</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="dataHandlers"><span class="type-signature"></span>dataHandlers<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>By default, all dataHandlers are available and can be found
+attached to the .shard.handlers object. These handlers manage
+the order they are applied by their weight property.</p>
+<p>However, it is possible to configure the dataHandlers to use
+on a per-instance basis. When doing this, the handlers should
+be named in the order they should be applied.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1016">line 1016</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+    <dt class="tag-todo">To Do:</dt>
+    <dd class="tag-todo">
+        <ul>
+            <li>dataHandlers probably should be renamed to avoid intrepid.dataHandlers.dataHandlers() or similar.</li>
+        </ul>
+    </dd>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="getHandlersOrderedByWeight"><span class="type-signature"></span>getHandlersOrderedByWeight<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>List out the added handlers in order of their weight.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1041">line 1041</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
@@ -239,13 +597,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="examples.html">examples</a></li><li><a href="examples.dataHandlers.html">examples.dataHandlers</a></li><li><a href="examples.dataHandlers.obj.html">examples.dataHandlers.obj</a></li><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="intrepid.uniqueList.shared.html">intrepid.uniqueList.shared</a></li><li><a href="is.html">is</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 01:54:30 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 14:31:35 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

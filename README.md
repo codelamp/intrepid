@@ -4,7 +4,7 @@
 
 This is a simple utility for navigating structures, it has been broken off from my Theory lib, because it was complex enough to stand alone, and is still in progress.
 
-For now there is only a simple Query language available via `intrepid.simpleQuery` but there will be more to follow shortly, like the Object Path Notation that theory was developing.
+For now there is only a simple Query language available via {@link intrepid.simpleQuery} but there will be more to follow shortly, like the Object Path Notation that theory was developing.
 
 ## Getting started
 
@@ -68,7 +68,7 @@ This library is designed to be extended, and is built following my theory.js con
 
 ### Theory objects
 
-Theory doesn't use constructors or classes generally, instead namespaces are built up as extended and mixed in objects using `Object.create` and `Object.assign`.
+Theory doesn't use function constructors or classes generally, instead namespaces are built up as extended and mixed in objects using `Object.create` and `Object.assign`.
 
 Over the years I've come to prefer this approach for a few reasons:
 
@@ -81,13 +81,17 @@ This approach is not without its issues and gotchas however.
 
 #### Shared references
 
-One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to. For example, in PHP, you could have:
+One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to.
+
+For example, in PHP, you could have:
 
     class Test {
       $list = []
     }
 
-As you create instances of `Test`, each one will have a `->list` property, but each list property is unique — basically a new array is created each time. Now using `Object.create()`:
+As you create instances of `Test`, each one will have a `->list` property, but each list property is unique — basically a new array is created each time.
+
+Now using `Object.create()`:
 
     var Test = {
       list: []
@@ -103,6 +107,8 @@ Theory, and Intrepid, get around this issue by either re-defining properties for
 I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its "key" references are de-referenced.
 
 "de-referencing" doesn't mean items no longer have a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that "same" object but a different reference.
+
+Some people may refer to this as a clone, but I avoid the terminology, because clone can mean a number of things — none of which accurately explain what is happening. The dereferenced copy is neither a shallow clone or a deep clone, but somewhere in between.
 
 The reason for doing this can be summed up more easily with an example:
 
@@ -137,14 +143,27 @@ The namespace operation doesn't have to dereference all shared properties, just 
 
 ## Documentation
 
-For now the documentation can be found here, it is a work in progress, so please bear with me.
+For now the api reference can be found here, it is a work in progress, so please bear with me.
+
+[http://codelamp.github.io/intrepid/html/intrepid/0.0.1/index.html](http://codelamp.github.io/intrepid/html/intrepid/0.0.1/index.html)
+
+I am also working on a nicer skin for the documentation powered by Metalsmith, the start of this can be found here:
 
 [http://codelamp.github.io/intrepid](http://codelamp.github.io/intrepid)
 
 ## Local development
 
-### Building docs
+### Building .min.js
 
-The documentation is powered by jsdoc, so you will need to install the dev dependencies via npm. Once that's done, you can build using:
+For now, Intrepid's build process is just minification, but later I hope to explode the source into smaller sections for dev, and combine them back up for build.
+
+The minification requires uglify installed for command line usage.
+
+    npm run make-build
+
+### Building ./docs/html
+
+The html reference docs are powered by jsdoc, so you will need to install the dev dependencies via npm. Once that's done, you can build using:
 
     npm run make-docs
+

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: is</title>
+    <title>JSDoc: Namespace: obj</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -16,7 +16,7 @@
 <body>
 
 <div id="main">
-    <h1 class="page-title">Namespace: is</h1>
+    <h1 class="page-title">Namespace: obj</h1>
 
     
 
@@ -27,7 +27,8 @@
 
 <header>
     
-        <h2>is</h2>
+        <h2>
+            <span class="ancestors"><a href="examples.html">examples</a><a href="examples.dataHandlers.html">.dataHandlers</a>.</span>obj</h2>
         
     
 </header>
@@ -36,7 +37,28 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Minimal export of my is namespace. Just contains some useful var type tests.</p></div>
+            <div class="description"><h5>About the 'obj' data handler</h5><p>A simple handler to traverse normal javascript objects, if they
+don't have any formatted structure. You can configure to use only
+this handler by doing:</p>
+<pre class="prettyprint source"><code>var nav = intrepid()
+  .config()
+    .dataHandlers('obj')
+  .endConfig()
+;</code></pre><p>Intrepid already ships with an instance that does this however, in the shape of <code>intrepid.objNav</code></p>
+<p>Data Handlers for Intrepid are just a collection of methods attached to an object,
+using particular naming conventions. All methods are treated as static and shared
+between all instances of data.</p>
+<p>This dataHandler treats structure in the following way:</p>
+<ol>
+<li>Any key whose value is not-primitive i.e. an Object is treated as a Child.</li>
+<li>Any key whose value is primitive i.e. string, number, ... is treated as an Attribute.</li>
+<li>Parents are tracked as children are navigated, so no formal parent reference is needed.</li>
+</ol>
+<p>The signature of the .dataHandlers.add is (name, weight, method).
+Where a larger number in weight means this is checked against a
+target object later than a lower weight. This is so that new
+additions can be placed higher and take over from default
+handlers.</p></div>
         
 
         
@@ -71,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line37">line 37</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2366">line 2366</a>
     </li></ul></dd>
     
 
@@ -107,14 +129,296 @@
 
     
 
-    <h4 class="name" id=".arguments"><span class="type-signature">(static) </span>arguments<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id=".attribute"><span class="type-signature">(static) </span>attribute<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Check that an item is an <code>Arguments</code> object.</p>
+    <p>Called when an attribute</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2449">line 2449</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".children"><span class="type-signature">(static) </span>children<span class="signature">(ref, filter<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;(Object|<a href="intrepid.targetReference.html">intrepid.targetReference</a>|<a href="intrepid.join.html">intrepid.join</a>)>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>step each targetted item, find its children, and return an optionally filtered array of objects</p>
+<p>The returned objects can be the target children themselves, or instances of <a href="intrepid.join.html">intrepid.join</a></p>
+<p>If requiring joins, use the <a href="intrepid.targetReference.html#joinChild">intrepid.targetReference#joinChild</a> helper, rather than creating directly.
+This will handle linking to the current parent. You will find this method available via <code>ref.joinChild()</code></p>
+<p>You can also return <a href="intrepid.targetReference.html">intrepid.targetReference</a> instances, although in most places you
+shouldn't need to create <a href="intrepid.targetReference.html">intrepid.targetReference</a> instances directly.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ref</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="intrepid.targetReference.html">intrepid.targetReference</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>the wrapped target item to find children on</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>optional filter function to filter the child items by</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2486">line 2486</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;(Object|<a href="intrepid.targetReference.html">intrepid.targetReference</a>|<a href="intrepid.join.html">intrepid.join</a>)></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".filter"><span class="type-signature">(static) </span>filter<span class="signature">(ref, filter)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>In most cases filters are functions, provided by the QueryInterface, but
+there isn't anything stopping the system from using something else as a filter.
+This is why this method is provided. It is called whenever a filter operation
+is requested. It is responsible for &quot;filtering&quot; the current ref against the filter.</p>
 </div>
 
 
@@ -150,13 +454,36 @@
 
         <tr>
             
-                <td class="name"><code>item</code></td>
+                <td class="name"><code>ref</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="intrepid.targetReference.html">intrepid.targetReference</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filter</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">mixed</span>
 
 
             
@@ -207,7 +534,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line77">line 77</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2428">line 2428</a>
     </li></ul></dd>
     
 
@@ -233,11 +560,6 @@
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>returns true if item has <code>.length</code> that is a number and reports
-as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
-</div>
-
 
 
 <dl>
@@ -261,14 +583,15 @@ as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
 
     
 
-    <h4 class="name" id=".array"><span class="type-signature">(static) </span>array<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id=".hasAttribute"><span class="type-signature">(static) </span>hasAttribute<span class="signature">(ref, attr)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Check that an item quacks like an array.</p>
+    <p>Called whenever there is need for an attribute check. In terms of standard js
+objects, attributes can be counted as being non-object or non-array properties</p>
 </div>
 
 
@@ -304,13 +627,36 @@ as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
 
         <tr>
             
-                <td class="name"><code>item</code></td>
+                <td class="name"><code>ref</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="intrepid.targetReference.html">intrepid.targetReference</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>attr</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
             
@@ -361,7 +707,7 @@ as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line43">line 43</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2441">line 2441</a>
     </li></ul></dd>
     
 
@@ -387,10 +733,6 @@ as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>returns true if item has <code>.join</code> method</p>
-</div>
-
 
 
 <dl>
@@ -414,22 +756,15 @@ as <code>[object Arguments]</code> when <code>.toString()-ed</code>.</p>
 
     
 
-    <h4 class="name" id=".arraylike"><span class="type-signature">(static) </span>arraylike<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id=".hasChildren"><span class="type-signature">(static) </span>hasChildren<span class="signature">(ref)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Check that an item is &quot;array like&quot;, meaning that it can most likely be treated
-in the simplest sense as an array. This does not cover checking that it supports
-array methods i.e. like <code>slice</code> or <code>push</code>; just the fact that the object has a
-numeric key structure i.e. <code>item[0]</code>, and <code>.length</code></p>
-<p>This will fail for array-likes that are empty -- this is because we can only
-check that <code>.length</code> is a number -- which is far too open. A special case
-is made for an arguments object, because we can detect those by checking <code>.toString()</code>.</p>
-<p>I fully expect this method to be expanded as this code encounters other
-array-likes, e.g. node lists.</p>
+    <p>Detect if the current targets have children, in terms of js objects
+this means the value is an object or array with content</p>
 </div>
 
 
@@ -465,13 +800,13 @@ array-likes, e.g. node lists.</p>
 
         <tr>
             
-                <td class="name"><code>item</code></td>
+                <td class="name"><code>ref</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="intrepid.targetReference.html">intrepid.targetReference</a></span>
 
 
             
@@ -522,7 +857,7 @@ array-likes, e.g. node lists.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line54">line 54</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2461">line 2461</a>
     </li></ul></dd>
     
 
@@ -548,10 +883,6 @@ array-likes, e.g. node lists.</p>
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>returns true if item has <code>.length</code> and <code>[0]</code>, or <code>is.array()</code>, or <code>is.arguments()</code></p>
-</div>
-
 
 
 <dl>
@@ -575,14 +906,182 @@ array-likes, e.g. node lists.</p>
 
     
 
-    <h4 class="name" id=".callable"><span class="type-signature">(static) </span>callable<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+    <h4 class="name" id=".hasParent"><span class="type-signature">(static) </span>hasParent<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    <p>Check that an item is callable.</p>
+    <p>Determine if the object supports parent handling, return false otherwise</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2511">line 2511</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".parent"><span class="type-signature">(static) </span>parent<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Called when attempting to access the parent</p>
+<p>For this data structure type, <code>ref.getParent()</code> will only work if <code>.children()</code> has correctly
+supported things using this.join()</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2523">line 2523</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id=".validation"><span class="type-signature">(static) </span>validation<span class="signature">(ref)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The valifation method is called on each possible target. The first
+valifation function to return true is the dataHandler that is used
+for that target.</p>
 </div>
 
 
@@ -618,13 +1117,13 @@ array-likes, e.g. node lists.</p>
 
         <tr>
             
-                <td class="name"><code>item</code></td>
+                <td class="name"><code>ref</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">any</span>
+<span class="param-type"><a href="intrepid.targetReference.html">intrepid.targetReference</a></span>
 
 
             
@@ -634,7 +1133,9 @@ array-likes, e.g. node lists.</p>
 
             
 
-            <td class="description last"></td>
+            <td class="description last"><p>all targets are wrapped with targetReference,
+       to gain access to that actual target use .get(), to get its key use
+       .getKey() and to get its parent use .getParent()</p></td>
         </tr>
 
     
@@ -675,7 +1176,7 @@ array-likes, e.g. node lists.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line123">line 123</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line2412">line 2412</a>
     </li></ul></dd>
     
 
@@ -701,623 +1202,6 @@ array-likes, e.g. node lists.</p>
 <h5>Returns:</h5>
 
         
-<div class="param-desc">
-    <p>returns true if the item has <code>.call</code> and <code>.apply</code> methods</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".element"><span class="type-signature">(static) </span>element<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Check that an item quacks like an element.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Element</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line134">line 134</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>returns true if the item has getElementsByTagName</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".object"><span class="type-signature">(static) </span>object<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>Check that an item is an object. In JavaScript this is almost pointless.</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line112">line 112</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>returns true if item reports as <code>typeof object</code></p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".primitive"><span class="type-signature">(static) </span>primitive<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>A primitive accounts for numbers, booleans, strings, undefined, NaN and null</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line89">line 89</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>returns true if item reports as not being typeof object</p>
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id=".primitiveObject"><span class="type-signature">(static) </span>primitiveObject<span class="signature">(item)</span><span class="type-signature"> &rarr; {Boolean}</span></h4>
-
-    
-
-
-
-<div class="description">
-    <p>A primitive object accounts for primitives that have been wrapped with
-their object counterpart</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>item</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">any</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line100">line 100</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    <p>returns true if item is typeof an object, but its valueOf() reports as not being an object.</p>
-</div>
-
 
 
 <dl>

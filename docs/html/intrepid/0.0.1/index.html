@@ -43,7 +43,7 @@
 
     <section>
         <article><h1>Intrepid</h1><h2>Overview</h2><p>This is a simple utility for navigating structures, it has been broken off from my Theory lib, because it was complex enough to stand alone, and is still in progress.</p>
-<p>For now there is only a simple Query language available via <code>intrepid.simpleQuery</code> but there will be more to follow shortly, like the Object Path Notation that theory was developing.</p>
+<p>For now there is only a simple Query language available via <a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a> but there will be more to follow shortly, like the Object Path Notation that theory was developing.</p>
 <h2>Getting started</h2><p>Just install the module from Github:</p>
 <pre class="prettyprint source"><code>git clone git@github.com:codelamp/intrepid.git</code></pre><p>Or, via npm:</p>
 <pre class="prettyprint source"><code>npm install intrepid --save-dev</code></pre><p>This module is designed to work both in the browser and node environments, and supports CommonJS, AMD and global import.</p>
@@ -77,7 +77,7 @@ var n = intrepid.objNav;
 var o = n.create(testData);
 var s = o.find(q.create('simple/**/to'));</code></pre><p>Both querying languages are similar, but intrepid's design shouldn't prevent different kinds of query languages being developed or appropriated.</p>
 <h2>Extending intrepid</h2><p>This library is designed to be extended, and is built following my theory.js construction, although the theory lib itself has been totally removed as a dependency.</p>
-<h3>Theory objects</h3><p>Theory doesn't use constructors or classes generally, instead namespaces are built up as extended and mixed in objects using <code>Object.create</code> and <code>Object.assign</code>.</p>
+<h3>Theory objects</h3><p>Theory doesn't use function constructors or classes generally, instead namespaces are built up as extended and mixed in objects using <code>Object.create</code> and <code>Object.assign</code>.</p>
 <p>Over the years I've come to prefer this approach for a few reasons:</p>
 <ol>
 <li>Simplicity — everything is an object, not a complex/js-particular type that requires special syntax</li>
@@ -86,16 +86,19 @@ var s = o.find(q.create('simple/**/to'));</code></pre><p>Both querying languages
 <li>Portability — if your structure is mainly an object, it can easily be ported between languages</li>
 </ol>
 <p>This approach is not without its issues and gotchas however.</p>
-<h4>Shared references</h4><p>One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to. For example, in PHP, you could have:</p>
+<h4>Shared references</h4><p>One thing that is usually a benefit in terms of using classes, is that the language manages references for you. When dealing with plain old JS objects, you are responsible for managing references. I prefer this, as it gives me control, but it takes a bit of getting used to.</p>
+<p>For example, in PHP, you could have:</p>
 <pre class="prettyprint source"><code>class Test {
   $list = []
-}</code></pre><p>As you create instances of <code>Test</code>, each one will have a <code>-&gt;list</code> property, but each list property is unique — basically a new array is created each time. Now using <code>Object.create()</code>:</p>
+}</code></pre><p>As you create instances of <code>Test</code>, each one will have a <code>-&gt;list</code> property, but each list property is unique — basically a new array is created each time.</p>
+<p>Now using <code>Object.create()</code>:</p>
 <pre class="prettyprint source"><code>var Test = {
   list: []
 };</code></pre><p>Whenever you create a new instance <code>Object.create(Test)</code> the list is the same array, and will be shared between instances. This distinct behavioural difference can cause unexpected side-effects if you aren't aware.</p>
 <p>Theory, and Intrepid, get around this issue by either re-defining properties for each newly created instance, or using a system it refers to as namespace.</p>
 <h4>.namespace()</h4><p>I may rename this in the future, but so far it is the best term I can come up with for what the functionality does. Essentially, when you namespace an object all of its &quot;key&quot; references are de-referenced.</p>
 <p>&quot;de-referencing&quot; doesn't mean items no longer have a reference, if that were the case, we'd be no longer talking about objects but rather collected garbage. No, I use de-referencing to mean that a similar object is created in its place, basically it is that &quot;same&quot; object but a different reference.</p>
+<p>Some people may refer to this as a clone, but I avoid the terminology, because clone can mean a number of things — none of which accurately explain what is happening. The dereferenced copy is neither a shallow clone or a deep clone, but somewhere in between.</p>
 <p>The reason for doing this can be summed up more easily with an example:</p>
 <pre class="prettyprint source"><code>var a = {
   childObject: {
@@ -108,9 +111,13 @@ var b = Object.create(a);</code></pre><p>With the above construction, I can happ
 <pre class="prettyprint source"><code>var b = a.create();</code></pre><p>A standard create request will still retain shared references (it depends on the constructors behaviour), because shared refs save resources and can be useful. You also aren't usually creating an instance only to change its internal structure. You normally only do this if you are aiming to create a new constructor. So, if we were planning for <code>b</code> to be a new modified version of <code>a</code>, we can do the following:</p>
 <pre class="prettyprint source"><code>var b = a.create().namespace();</code></pre><p>Now <code>b</code> should have the parts of its structure that allow change, dereferenced. The way the dereferencing is applied, depends on <code>a's</code> namespace template. This is an internal object that just highlights the properties that need dereferencing, and how they should be dereferenced. So now, as long as <code>a</code> defined <code>childObject</code> as a property that needed deref, we should be able to:</p>
 <pre class="prettyprint source"><code>b.childObject.modifyWithoutFear = true;</code></pre><p>The namespace operation doesn't have to dereference all shared properties, just the ones outlined in the namespace template. So it is fully possible to still have shared properties after namespacing.</p>
-<h2>Documentation</h2><p>For now the documentation can be found here, it is a work in progress, so please bear with me.</p>
+<h2>Documentation</h2><p>For now the api reference can be found here, it is a work in progress, so please bear with me.</p>
+<p><a href="http://codelamp.github.io/intrepid/html/intrepid/0.0.1/index.html">http://codelamp.github.io/intrepid/html/intrepid/0.0.1/index.html</a></p>
+<p>I am also working on a nicer skin for the documentation powered by Metalsmith, the start of this can be found here:</p>
 <p><a href="http://codelamp.github.io/intrepid">http://codelamp.github.io/intrepid</a></p>
-<h2>Local development</h2><h3>Building docs</h3><p>The documentation is powered by jsdoc, so you will need to install the dev dependencies via npm. Once that's done, you can build using:</p>
+<h2>Local development</h2><h3>Building .min.js</h3><p>For now, Intrepid's build process is just minification, but later I hope to explode the source into smaller sections for dev, and combine them back up for build.</p>
+<p>The minification requires uglify installed for command line usage.</p>
+<pre class="prettyprint source"><code>npm run make-build</code></pre><h3>Building ./docs/html</h3><p>The html reference docs are powered by jsdoc, so you will need to install the dev dependencies via npm. Once that's done, you can build using:</p>
 <pre class="prettyprint source"><code>npm run make-docs</code></pre></article>
     </section>
 
@@ -122,13 +129,13 @@ var b = Object.create(a);</code></pre><p>With the above construction, I can happ
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="is.html">is</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_createList">_createList</a></li><li><a href="global.html#allowDuplicates">allowDuplicates</a></li><li><a href="global.html#attribute">attribute</a></li><li><a href="global.html#attributes">attributes</a></li><li><a href="global.html#chain">chain</a></li><li><a href="global.html#children">children</a></li><li><a href="global.html#choose">choose</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#dataHandlers">dataHandlers</a></li><li><a href="global.html#disallowDuplicates">disallowDuplicates</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getArray">getArray</a></li><li><a href="global.html#getCursor">getCursor</a></li><li><a href="global.html#getHandlersOrderedByWeight">getHandlersOrderedByWeight</a></li><li><a href="global.html#getKey">getKey</a></li><li><a href="global.html#getParent">getParent</a></li><li><a href="global.html#handleSegment">handleSegment</a></li><li><a href="global.html#hasAttribute">hasAttribute</a></li><li><a href="global.html#hasChildren">hasChildren</a></li><li><a href="global.html#joinChild">joinChild</a></li><li><a href="global.html#log">log</a></li><li><a href="global.html#parent">parent</a></li><li><a href="global.html#prep">prep</a></li><li><a href="global.html#shared">shared</a></li><li><a href="global.html#target">target</a></li><li><a href="global.html#targets">targets</a></li><li><a href="global.html#test">test</a></li><li><a href="global.html#validation">validation</a></li><li><a href="global.html#wrap">wrap</a></li><li><a href="global.html#wrapItem">wrapItem</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="intrepid.join.html">intrepid.join</a></li></ul><h3>Namespaces</h3><ul><li><a href="examples.html">examples</a></li><li><a href="examples.dataHandlers.html">examples.dataHandlers</a></li><li><a href="examples.dataHandlers.obj.html">examples.dataHandlers.obj</a></li><li><a href="go.html">go</a></li><li><a href="intrepid.html">intrepid</a></li><li><a href="intrepid.base.html">intrepid.base</a></li><li><a href="intrepid.cursorObject.html">intrepid.cursorObject</a></li><li><a href="intrepid.dataHandlers.html">intrepid.dataHandlers</a></li><li><a href="intrepid.instance.html">intrepid.instance</a></li><li><a href="intrepid.instance.helpers.html">intrepid.instance.helpers</a></li><li><a href="intrepid.instance.shared.html">intrepid.instance.shared</a></li><li><a href="intrepid.queryInterface.html">intrepid.queryInterface</a></li><li><a href="intrepid.queryInterface.shared.html">intrepid.queryInterface.shared</a></li><li><a href="intrepid.queryInterface.shared.segments.html">intrepid.queryInterface.shared.segments</a></li><li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li><li><a href="intrepid.queryInterface.shared.segments.combination.html">intrepid.queryInterface.shared.segments.combination</a></li><li><a href="intrepid.queryInterface.shared.segments.directive.html">intrepid.queryInterface.shared.segments.directive</a></li><li><a href="intrepid.queryInterface.shared.segments.matcher.html">intrepid.queryInterface.shared.segments.matcher</a></li><li><a href="intrepid.simpleQuery.html">intrepid.simpleQuery</a></li><li><a href="intrepid.targetReference.html">intrepid.targetReference</a></li><li><a href="intrepid.targetReference.shared.html">intrepid.targetReference.shared</a></li><li><a href="intrepid.uniqueList.html">intrepid.uniqueList</a></li><li><a href="intrepid.uniqueList.shared.html">intrepid.uniqueList.shared</a></li><li><a href="is.html">is</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 01:54:30 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Thu Jun 15 2017 14:31:35 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

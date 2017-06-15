@@ -374,6 +374,8 @@ var go = {
  *     npm install intrepid
  *
  * @namespace intrepid
+ * @todo the design should not require filters to be functions, they could be strings or objects
+ * currently however the handling is checking for .call on filters. This needs to change.
  */
 var intrepid = function(){
   return intrepid.instance.create.apply(intrepid.instance, arguments);
@@ -583,10 +585,23 @@ intrepid.queryInterface = intrepid.base.extend({
    * Contains all the default segments, these are expected segments
    * that the navigation system needs to function.
    *
+   * Default segments should retain the same references across namespaces
+   * as the references themselves are used for camparion inside the
+   * navigation code.
+   *
    * @namespace intrepid.queryInterface.shared.segments
    * @memberof intrepid.queryInterface.shared
    */
-    segments: {}
+    segments: {},
+    /**
+     * Namespace template used to create a new namespace. For QI it is
+     * currently empty because everything can be left as shared refs.
+     *
+     * @memberof intrepid.queryInterface.shared
+     * @type {Object}
+     * @name namespaceTemplate
+     */
+    namespaceTemplate: {}
   },
 
   /**
@@ -725,6 +740,12 @@ intrepid.queryInterface = intrepid.base.extend({
    * @memberof intrepid.queryInterface.shared.segments
    */
   segments.base = {
+    /**
+     * Allow this object to be extended by others
+     *
+     * @memberof intrepid.queryInterface.shared.segments.base
+     * @instance
+     */
     extend: function(props){
       return Object.assign(Object.create(this), props || {});
     }
@@ -947,7 +968,7 @@ intrepid.queryInterface = intrepid.base.extend({
 })(intrepid.queryInterface, intrepid.queryInterface.shared.segments);
 
 /**
- * Data handlers allow the intrepid system to intrepid different structures
+ * Data handlers allow the intrepid system to navigate different structures
  *
  * @namespace intrepid.dataHandlers
  * @memberof intrepid
@@ -987,6 +1008,10 @@ intrepid.dataHandlers = intrepid.base.extend({
    * However, it is possible to configure the dataHandlers to use
    * on a per-instance basis. When doing this, the handlers should
    * be named in the order they should be applied.
+   *
+   * @todo dataHandlers probably should be renamed to avoid intrepid.dataHandlers.dataHandlers() or similar.
+   * @memberof intrepid.dataHandlers
+   * @instance
    */
   dataHandlers: function(names){
     var filtered = this.shared.filtered, handlers = this.shared.handlers;
@@ -1008,7 +1033,10 @@ intrepid.dataHandlers = intrepid.base.extend({
   },
 
   /**
+   * List out the added handlers in order of their weight.
    *
+   * @memberof intrepid.dataHandlers
+   * @instance
    */
   getHandlersOrderedByWeight: function(){
     var a = this.shared.handlers.byList.slice(), i = 0, l = a.length;
@@ -1030,6 +1058,12 @@ intrepid.dataHandlers = intrepid.base.extend({
    * objects. Usually used for parent->child relationships. You can access the
    * properties of a join using .from() .by() and .to() - in parent->child
    * from() would be the parent, by() would be the key, and to() would be the child.
+   *
+   * This is only required to be used if the datastructre you are parsing
+   * has no official concept of parent->child.
+   *
+   * @memberof intrepid.dataHandlers
+   * @instance
    */
   choose: function(ref){
     var s = this.shared, a = s.filtered.inOrder || s.handlers.inOrder,
@@ -1072,6 +1106,10 @@ intrepid.dataHandlers = intrepid.base.extend({
    *   processChildren: function(){},
    *
    * });
+   *
+   * @param {String} name
+   * @param {Number} weight
+   * @param {Object} obj
    * @memberof intrepid.dataHandlers
    * @instance
    */
@@ -1157,7 +1195,7 @@ intrepid.join.prototype.toString = function(){
 };
 
 /**
- * For each target, the handler used to intrepid can be different
+ * For each target, the handler used to navigate can be different
  * this is why we wrap each target in a targetReference instance.
  *
  * @namespace intrepid.targetReference
@@ -1248,6 +1286,9 @@ intrepid.targetReference = intrepid.base.extend({
   /**
    * Each handler is responsible for returning the matching attributes
    * as an array. If supported.
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   attributes: function(){
     if ( this.i.handler.hasAttributes(this) ) {
@@ -1263,6 +1304,9 @@ intrepid.targetReference = intrepid.base.extend({
    * Each handler is responsible for returning an array of
    * objects. These can be direct child references, or they
    * can be instances of intrepid.pair
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   children: function(filter){
     if ( this.i.handler.hasChildren(this) ) {
@@ -1276,6 +1320,9 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * The handler should return one object, the parent of the current target
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   parent: function(filter){
     if ( this.i.handler.hasParent(this) ) {
@@ -1289,6 +1336,9 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * The handler should return the object, or false
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   filter: function(filter){
     if ( this.i.handler.filter(this, filter) ) {
@@ -1299,6 +1349,9 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * Test the object stored under .to() against a list of functions
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   test: function(){
     var target = this.get();
@@ -1312,6 +1365,9 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * get the data stored at .to()
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   get: function(){
     return this.i.join.to();
@@ -1319,6 +1375,9 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * get the data stored at .by()
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   getKey: function(){
     return this.i.join.by();
@@ -1326,13 +1385,20 @@ intrepid.targetReference = intrepid.base.extend({
 
   /**
    * get the data stored at .from()
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   getParent: function(){
     return this.i.join.from();
   },
 
   /**
+   *  A join helper, pass in a key and a child object, and you will be returned an instance of {@link intrepid.join}
+   * using the current target as the parent.
    *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   joinChild: function(by, to){
     return this.i.join.join(by, to);
@@ -1343,6 +1409,9 @@ intrepid.targetReference = intrepid.base.extend({
    * normal objects or they could be special intrepid instances
    * wrap just normalises the list, so that they are all represented
    * by instances of targetReference
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   wrap: function(list){
     if ( !list ) return [];
@@ -1359,7 +1428,10 @@ intrepid.targetReference = intrepid.base.extend({
   },
 
   /**
-   * Wrap the individual items
+   * Wrap the individual items with `intrepid.targetReference`
+   *
+   * @memberof intrepid.targetReference
+   * @instance
    */
   wrapItem: function(item){
     if ( this.isPrototypeOf(item) ) {
@@ -1385,7 +1457,21 @@ intrepid.targetReference = intrepid.base.extend({
 intrepid.uniqueList = intrepid.base.extend({
 
   /**
-   * The following is shared between all instances in the same namespace
+   * Shared object across all uniqueList instances of the same namespace
+   *
+   * @namespace intrepid.uniqueList.shared
+   * @memberof intrepid.uniqueList
+   *
+   * @property {Object} namespaceTemplate is used when creating a safe clone of this
+   *                    object using .namespace() - the newly created object can then
+   *                    be modified without fear of affecting other instances where it matters.
+   *                    This template object should be extended (or replaced) if you
+   *                    extend intrepid.instance, so that new namespaces know what references
+   *                    need to be unique.
+   *
+   * @property {Object} config stores shared configuration for instances under the same namespace
+   *
+   * @property {Object} configMethods stores the keys of methods that can be collected to create a configuration API.
    */
   shared: {
     namespaceTemplate: {
@@ -1407,6 +1493,9 @@ intrepid.uniqueList = intrepid.base.extend({
 
   /**
    * Create a new instance of uniqueList
+   *
+   * @memberof intrepid.uniqueList
+   * @static
    */
   create: function(){
     return this.prep.apply(Object.create(this), arguments);
@@ -1414,6 +1503,10 @@ intrepid.uniqueList = intrepid.base.extend({
 
   /**
    * Because WeakMap only supports objects, we have to store primitives separately
+   *
+   * @memberof intrepid.uniqueList
+   * @instance
+   * @private
    */
   prep: function(){
     this.i = {};
@@ -1428,6 +1521,12 @@ intrepid.uniqueList = intrepid.base.extend({
     return this;
   },
 
+  /**
+   * Push a new item onto the uniqueList
+   *
+   * @memberof intrepid.uniqueList
+   * @instance
+   */
   push: function(v){
     var ce = this.shared.config.comparisonEntity(v);
     if ( ce === v ) {
@@ -1452,6 +1551,12 @@ intrepid.uniqueList = intrepid.base.extend({
     }
   },
 
+  /**
+   * Get an item at zero-based index n
+   *
+   * @memberof intrepid.uniqueList
+   * @instance
+   */
   get: function(n){
     if ( arguments.length ) {
       return this.i.items[n];
@@ -1461,6 +1566,12 @@ intrepid.uniqueList = intrepid.base.extend({
     }
   },
 
+  /**
+   * Configure the comparisonEntity
+   *
+   * @memberof intrepid.uniqueList
+   * @instance
+   */
   comparisonEntity: function(m){
     this.shared.config.comparisonEntity = m;
     return this;
@@ -1538,6 +1649,8 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
+   * @memberof intrepid.cursorObject
+   * @instance
    * @chainable
    */
   allowDuplicates: function(){
@@ -1546,6 +1659,8 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
+   * @memberof intrepid.cursorObject
+   * @instance
    * @chainable
    */
   disallowDuplicates: function(){
@@ -1554,7 +1669,8 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
-   *
+   * @memberof intrepid.cursorObject
+   * @private
    */
   prep: function(){
     this.i = {};
@@ -1563,7 +1679,8 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
-   *
+   * @memberof intrepid.cursorObject
+   * @instance
    */
   chain: function(){
     var instance = this.create();
@@ -1572,7 +1689,10 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
+   * Internal method to decide between using normal arrays and uniqueLists
    *
+   * @memberof intrepid.cursorObject
+   * @private
    */
   _createList: function(){
     if ( this.shared.config.allowDuplicates ) {
@@ -1583,13 +1703,32 @@ intrepid.cursorObject = intrepid.base.extend({
     }
   },
 
+  /**
+   * Clear the internal targets
+   *
+   * @memberof intrepid.cursorObject
+   * @private
+   */
   empty: function(){
     this.i.targets = [];
     return this;
   },
 
   /**
+   * Get the first target
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {intrepid.targetReference}
+   *//**
+   * Set the first target
+   *
+   * @param {Object} target
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
    * @chainable
+   * @returns {intrepid.cursorObject} this instance of cursorObject
    */
   target: function(target){
     if ( arguments.length ) {
@@ -1597,12 +1736,25 @@ intrepid.cursorObject = intrepid.base.extend({
       return this;
     }
     else {
-      return this.i.targets;
+      return this.i.targets[0] || null;
     }
   },
 
   /**
+   * Get the array of targets
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {Array.<intrepid.targetReference>}
+   *//**
+   * Set the list of targets
+   *
+   * @param {Array|intrepid.uniqueList} target
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
    * @chainable
+   * @returns {intrepid.cursorObject} this instance of cursorObject
    */
   targets: function(targets){
     if ( arguments.length ) {
@@ -1619,6 +1771,11 @@ intrepid.cursorObject = intrepid.base.extend({
 
   /**
    * Modify the target list to track the children of the current selection
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @chainable
+   * @returns {intrepid.cursorObject} a new instance of cursorObject
    */
   children: function(filter){
     var a,i,l, aa, ii, ll, list = this._createList();
@@ -1633,6 +1790,11 @@ intrepid.cursorObject = intrepid.base.extend({
 
   /**
    * Modify the target list to track the parents of the current selection
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @chainable
+   * @returns {intrepid.cursorObject} a new instance of cursorObject
    */
   parent: function(filter){
     var a,i,l, list = this._createList(), p;
@@ -1645,6 +1807,11 @@ intrepid.cursorObject = intrepid.base.extend({
 
   /**
    * Filter the current targets
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @chainable
+   * @returns {intrepid.cursorObject} a new instance of cursorObject
    */
   filter: function(filter){
     var a,i,l, aa, ii, ll, list = this._createList(), f;
@@ -1656,7 +1823,11 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
+   * Get a target at a particular offset, and resolve to the object i.e. unwrap from targetReference.
    *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {mixed}
    */
   get: function(n){
     if ( arguments.length ) {
@@ -1673,7 +1844,11 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
+   * Get the list of targets as an array, but unwrap them from their targetReferences first
    *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {Array.<mixed>}
    */
   getArray: function(){
     var a,i,l, list = [];
@@ -1683,6 +1858,13 @@ intrepid.cursorObject = intrepid.base.extend({
     return list;
   },
 
+  /**
+   * Get the list of targets as an array, but unwrap them from their targetReferences first
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {Array.<mixed>}
+   */
   add: function(item){
     if ( this.isPrototypeOf(item) ) {
       this.i.targets = this.i.targets.concat(item.i.targets);
@@ -1690,6 +1872,13 @@ intrepid.cursorObject = intrepid.base.extend({
     return this;
   },
 
+  /**
+   * Return the number of current targets
+   *
+   * @memberof intrepid.cursorObject
+   * @instance
+   * @returns {Array.<mixed>}
+   */
   length: function(){
     return this.i.targets ? this.i.targets.length : 0;
   }
@@ -1714,7 +1903,7 @@ intrepid.instance = intrepid.base.extend({
    * @property {Object} namespaceTemplate is used when creating a safe clone of this
    *                    object using .namespace() - the newly created object can then
    *                    be modified without fear of affecting other instances where it matters.
-   *                    This template object should be extended (or replaced) if you 
+   *                    This template object should be extended (or replaced) if you
    *                    extend intrepid.instance, so that new namespaces know what references
    *                    need to be unique.
    */
@@ -1921,6 +2110,12 @@ intrepid.instance = intrepid.base.extend({
    *
    * 1. the selector is using the expected queryInterface
    * 2. a cursor that understands the current data exists
+   *
+   * @todo `applyCombination` and others need to be shared reference functions
+   * @memberof intrepid.instance
+   * @returns {intrepid.instance} a new instance of `intrepid.instance`
+   * @chainable
+   * @instance
    */
   find: function(selector){
     var cursor = this.i.cursor.chain(),
@@ -2011,14 +2206,25 @@ intrepid.instance = intrepid.base.extend({
   },
 
   /**
+   * Gets a targetted item at offset n
    *
+   * @param {Number} n - zero-based offset of target to return
+   *
+   * @memberof intrepid.instance
+   * @returns {any}
+   * @instance
    */
   get: function(n){
     return this.i.cursor.get.apply(this.i.cursor, arguments);
   },
 
   /**
+   * Function to help with debugging, directly logs all targets to console.
    *
+   * @memberof intrepid.instance
+   * @returns {intrepid.instance} this instance of `intrepid.instance`
+   * @chainable
+   * @instance
    */
   log: function(){
     console.log(this.get());
@@ -2026,7 +2232,11 @@ intrepid.instance = intrepid.base.extend({
   },
 
   /**
+   * Returns the internal cursor, instance of {@link intrepid.cursorObject}
    *
+   * @memberof intrepid.instance
+   * @returns {intrepid.cursorObject}
+   * @instance
    */
   getCursor: function(){
     return this.i.cursor;
@@ -2052,6 +2262,14 @@ intrepid.instance = intrepid.base.extend({
  */
 intrepid.simpleQuery = intrepid.queryInterface.extend({
 
+  /**
+   * The process function for simpleQuery, takes an array selector of simple
+   * items and converts them into filter functions, matchers and directives
+   * that the navigation system will understand.
+   *
+   * @memberof intrepid.simpleQuery
+   * @instance
+   */
   process: function(selector){
     var list = [];
     // cause any non-anchored selector to scan deep
@@ -2070,6 +2288,9 @@ intrepid.simpleQuery = intrepid.queryInterface.extend({
    * are just for matching, whereas others do not match, intead they infer some alteration
    * to behaviour. E.g. 'tag-name' will just match, where as '..' will infer a change in
    * direction, and a direct next match.
+   *
+   * @memberof intrepid.simpleQuery
+   * @instance
    */
   handleSegment: function(segment, list){
     switch ( segment ) {
@@ -2120,14 +2341,60 @@ intrepid.simpleQuery = intrepid.queryInterface.extend({
 });
 
 /**
+ * This is a fake namespace, it doesn't actually exist in the codebase.
+ *
+ * It is here so as to document the comments for the internal extensions
+ * that come with Intrepid, but that may not have an external access point.
+ *
+ * @namespace examples
+ *//**
+ * This is a fake namespace, it doesn't actually exist in the codebase.
+ *
+ * It is here so as to document the comments for the internal data handlers
+ * that come with Intrepid.
+ *
+ * These handlers can be used by configuring an Intrepid instance, for example:
+ *
+ *     var egNav = intrepid()
+ *       .config()
+ *         .dataHandlers('obj')
+ *       .endConfig()
+ *     ;
+ *
+ * @namespace examples.dataHandlers
+ */
+/**
+ * ##### About the 'obj' data handler
+ *
  * A simple handler to traverse normal javascript objects, if they
- * don't have any formatted structure.
+ * don't have any formatted structure. You can configure to use only
+ * this handler by doing:
+ *
+ *     var nav = intrepid()
+ *       .config()
+ *         .dataHandlers('obj')
+ *       .endConfig()
+ *     ;
+ *
+ * Intrepid already ships with an instance that does this however, in the shape of `intrepid.objNav`
+ *
+ * Data Handlers for Intrepid are just a collection of methods attached to an object,
+ * using particular naming conventions. All methods are treated as static and shared
+ * between all instances of data.
+ *
+ * This dataHandler treats structure in the following way:
+ *
+ * 1. Any key whose value is not-primitive i.e. an Object is treated as a Child.
+ * 2. Any key whose value is primitive i.e. string, number, ... is treated as an Attribute.
+ * 3. Parents are tracked as children are navigated, so no formal parent reference is needed.
  *
  * The signature of the .dataHandlers.add is (name, weight, method).
  * Where a larger number in weight means this is checked against a
  * target object later than a lower weight. This is so that new
  * additions can be placed higher and take over from default
  * handlers.
+ *
+ * @namespace examples.dataHandlers.obj
  */
 intrepid.dataHandlers.add('obj', 1000, {
   /**
@@ -2135,10 +2402,12 @@ intrepid.dataHandlers.add('obj', 1000, {
    * valifation function to return true is the dataHandler that is used
    * for that target.
    *
-   * @param {targetReference} ref - all targets are wrapped with targetReference,
+   * @param {intrepid.targetReference} ref - all targets are wrapped with targetReference,
    *        to gain access to that actual target use .get(), to get its key use
    *        .getKey() and to get its parent use .getParent()
    * @returns {Boolean}
+   *
+   * @memberof examples.dataHandlers.obj
    */
   validation: function(ref){
     // validate what type of object this handler should run for
@@ -2150,9 +2419,11 @@ intrepid.dataHandlers.add('obj', 1000, {
    * This is why this method is provided. It is called whenever a filter operation
    * is requested. It is responsible for "filtering" the current ref against the filter.
    *
-   * @param {targetReference} ref
+   * @param {intrepid.targetReference} ref
    * @param {mixed} filter
    * @returns {Boolean}
+   *
+   * @memberof examples.dataHandlers.obj
    */
   filter: function(ref, filter){
     return filter(ref.get(), ref.getKey(), ref.getParent());
@@ -2161,15 +2432,19 @@ intrepid.dataHandlers.add('obj', 1000, {
    * Called whenever there is need for an attribute check. In terms of standard js
    * objects, attributes can be counted as being non-object or non-array properties
    *
-   * @param {targetReference} ref
+   * @param {intrepid.targetReference} ref
    * @param {string} attr
    * @returns {Boolean}
+   *
+   * @memberof examples.dataHandlers.obj
    */
   hasAttribute: function(ref, attr, valuehj){
 
   },
   /**
    * Called when an attribute
+   *
+   * @memberof examples.dataHandlers.obj
    */
   attribute: function(ref, attr, value){
 
@@ -2177,6 +2452,11 @@ intrepid.dataHandlers.add('obj', 1000, {
   /**
    * Detect if the current targets have children, in terms of js objects
    * this means the value is an object or array with content
+   *
+   * @param {intrepid.targetReference} ref
+   * @returns {Boolean}
+   *
+   * @memberof examples.dataHandlers.obj
    */
   hasChildren: function(ref){
     if ( ref.test(is.object, is.array) ) {
@@ -2187,9 +2467,21 @@ intrepid.dataHandlers.add('obj', 1000, {
     }
   },
   /**
-   * step each targetted item, find its children, and return a filtered list
-   * should return an array of objects i.e. [{val: <child>, key:<key>}]
-   * if using .pair() this will return the expected structure.
+   * step each targetted item, find its children, and return an optionally filtered array of objects
+   *
+   * The returned objects can be the target children themselves, or instances of {@link intrepid.join}
+   *
+   * If requiring joins, use the {@link intrepid.targetReference#joinChild} helper, rather than creating directly.
+   * This will handle linking to the current parent. You will find this method available via `ref.joinChild()`
+   *
+   * You can also return {@link intrepid.targetReference} instances, although in most places you
+   * shouldn't need to create {@link intrepid.targetReference} instances directly.
+   *
+   * @param {intrepid.targetReference} ref - the wrapped target item to find children on
+   * @param {Function} [filter] - optional filter function to filter the child items by
+   * @returns {Array.<Object|intrepid.targetReference|intrepid.join>}
+   *
+   * @memberof examples.dataHandlers.obj
    */
   children: function(ref, filter){
     if ( ref.test(is.object, is.array) ) {
@@ -2211,12 +2503,24 @@ intrepid.dataHandlers.add('obj', 1000, {
     }
   },
 
+  /**
+   * Determine if the object supports parent handling, return false otherwise
+   *
+   * @memberof examples.dataHandlers.obj
+   */
   hasParent: function(ref){
-    // determine if the object supports parent handling, return false otherwise
+    //
     return !!ref.getParent();
   },
+  /**
+   * Called when attempting to access the parent
+   *
+   * For this data structure type, `ref.getParent()` will only work if `.children()` has correctly
+   * supported things using this.join()
+   *
+   * @memberof examples.dataHandlers.obj
+   */
   parent: function(ref){
-    // only works if .children() has correctly supported things using this.join()
     return ref.getParent();
   },
 
@@ -2230,8 +2534,8 @@ intrepid.dataHandlers.add('obj', 1000, {
 
 });
 
-/**
- * Create a navigator designed to intrepid HTML
+/*
+ * Create a navigator designed to navigate HTML
  */
 intrepid.dataHandlers.add('dom', 500, {
 

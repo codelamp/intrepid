@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Namespace: directive</title>
+    <title>JSDoc: Namespace: shared</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -16,7 +16,7 @@
 <body>
 
 <div id="main">
-    <h1 class="page-title">Namespace: directive</h1>
+    <h1 class="page-title">Namespace: shared</h1>
 
     
 
@@ -28,7 +28,7 @@
 <header>
     
         <h2>
-            <span class="ancestors"><a href="intrepid.html">intrepid</a><a href="intrepid.queryInterface.html">.queryInterface</a><a href="intrepid.queryInterface.shared.html">.shared</a><a href="intrepid.queryInterface.shared.segments.html">.segments</a>.</span>directive</h2>
+            <span class="ancestors"><a href="intrepid.html">intrepid</a><a href="intrepid.uniqueList.html">.uniqueList</a>.</span>shared</h2>
         
     
 </header>
@@ -37,11 +37,113 @@
     <div class="container-overview">
     
         
-            <div class="description"><p>Extend directive to create a new 'directive' type. Directives tell
-the navigation system to perform an opteration.</p></div>
+            <div class="description"><p>Shared object across all uniqueList instances of the same namespace</p></div>
         
 
         
+
+
+    <h5 class="subsection-title">Properties:</h5>
+
+    
+
+<table class="props">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>namespaceTemplate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>is used when creating a safe clone of this
+                   object using .namespace() - the newly created object can then
+                   be modified without fear of affecting other instances where it matters.
+                   This template object should be extended (or replaced) if you
+                   extend intrepid.instance, so that new namespaces know what references
+                   need to be unique.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>stores shared configuration for instances under the same namespace</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>configMethods</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>stores the keys of methods that can be collected to create a configuration API.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 <dl class="details">
@@ -73,7 +175,7 @@ the navigation system to perform an opteration.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line762">line 762</a>
+        <a href="intrepid.js.html">intrepid.js</a>, <a href="intrepid.js.html#line1459">line 1459</a>
     </li></ul></dd>
     
 
@@ -88,17 +190,6 @@ the navigation system to perform an opteration.</p></div>
         
     
     </div>
-
-    
-        <h3 class="subsection-title">Extends</h3>
-
-        
-
-
-    <ul>
-        <li><a href="intrepid.queryInterface.shared.segments.base.html">intrepid.queryInterface.shared.segments.base</a></li>
-    </ul>
-
 
     
 

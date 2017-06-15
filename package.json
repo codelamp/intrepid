@@ -12,7 +12,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "make-docs": "./node_modules/.bin/jsdoc './src' -c './docs/conf.json' -d './docs/html' -t './docs/theme/default' -R './README.md' -P './package.json' -p --debug --pedantic"
+    "make-docs": "rm -rf './docs/html'; ./node_modules/.bin/jsdoc './src' -c './docs/conf.json' -d './docs/html' -t './docs/theme/default' -R './README.md' -P './package.json' -p --debug --pedantic",
+    "make-build": "uglifyjs ./src/intrepid.js --compress --output ./build/intrepid.min.js"
   },
   "repository": {
     "type": "git",
