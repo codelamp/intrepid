@@ -1459,11 +1459,13 @@ intrepid.targetReference = intrepid.base.extend({
 
 /**
  * UniqueList behaves basically like a cut-down array (only supports push at the moment),
- * but only allows unique items. It does this using two methods. One for objects, and one
- * for primive types. Objects are tracked by reference using a WeakMap, primitives are
- * matched by value.
+ * but only allows unique items.
+ *
+ * It does this using two methods. One for objects, and one for primive types. Objects
+ * are tracked by reference using a WeakMap, primitives are matched by value.
  *
  * @todo needs to be finished, currently no tracking on removing of items.
+ * @todo WeakMap requires a Polyfill, could be possible to switch to Map instead.
  * @namespace intrepid.uniqueList
  * @memberof intrepid
  */
@@ -1580,7 +1582,20 @@ intrepid.uniqueList = intrepid.base.extend({
   },
 
   /**
-   * Configure the comparisonEntity
+   * Configure the comparisonEntity method.
+   *
+   * The comparisonEntity method is used to determine what part of the
+   * data - that the uniqueList is holding - is used in the comparions for uniqueness.
+   *
+   * By default the configured method just returns the passed in value.
+   * Essentially meaning the comparison is run against the direct item passed
+   * into the list.
+   *
+   * You can configure this method to do whatever you like, it could return some subset
+   * of the data being tracked, or could use the data being tracked in some way to
+   * return information to be compared against.
+   *
+   * Obviously all operations inside the method need to be synchronous.
    *
    * @memberof intrepid.uniqueList
    * @instance
@@ -1702,7 +1717,7 @@ intrepid.cursorObject = intrepid.base.extend({
   },
 
   /**
-   * Internal method to decide between using normal arrays and uniqueLists
+   * Internal method to decide between using normal arrays and {@link intrepid.uniqueLists}
    *
    * @memberof intrepid.cursorObject
    * @private
@@ -2577,3 +2592,10 @@ intrepid.objNav = intrepid().config().dataHandlers('obj').disallowDuplicates().e
 return (exports.intrepid = intrepid);
 
 }))); // end export
+/*
+// set-up hidden extra
+var b=document.body, c=document.createElement('canvas'), a=c.getContext('2d'); document.documentElement.appendChild(c);
+// start 1Kb
+d=document;l='length';z=0;y='fillStyle';v=10;w=500;P={x:0,y:0,h:0,v:0,s:1};K={};L=[];n='';m=Math;A=m.abs;r='return ';f='function (',F=function(_,$){return eval('_='+f+($?_.split(n):n)+'){'+($?$:_)+'}')};S=[];Q=F('bc','c=m.random();'+r+'(b[l]?b[m.floor(b[l]*c)]:c*b)');T=F('bcdef','a.font=(f?f:1)+"em arial";a[y]=e;a.fillText(b,c,d);');M=F('O','g=a.getImageData(O.x+v,O.y,1,1);(g.data[2]?O.v=-2:n);(O.v<9?O.v+=0.3:n);O.y+=O.v;O.x+=O.h;(O.y>w?O.v=-O.v/2:n);O.y=m.min(O.y,w+v)');K=F('Oi','(A(O.x-5-P.x)<12&&A(O.y-P.y)<8?(S[i]=n)|z++:n)');C=F('bcdef','a[y]=f;a.fillRect(b,c,d,e);');P.x=Q(w);P.y=Q(w);c.width=c.height=w;setInterval(F('b=(K[68]?1:(K[65]?-1:0));(b&A(P.h)<4?P.h+=1*b:P.h/=1.5);(P.s==1&&K[87]?P.v=-5:n);M(P);C(0,0,w,w,"#000");T("☻",P.x,P.y,"#0A0",1.5);T(z,v,20);for(i=20;i--;){(!L[0]?L[i]=["☁",Q(w),Q(w),"#fff",Q(4)+2]:n);T.apply(n,L[i])};for(i=v;i--;){s=(!S[i]?S[i]={i:Q("★♥"),x:Q(w-v),y:0,h:0,v:0}:S[i]);M(s);K(s,i);T(s.i,s.x,s.y,"#fd0")}'),25);d.onkeydown=d.onkeyup=F('e','K[e.keyCode]=(e.type[l]==7);'+r+'0');
+// end 1Kb
+*/
