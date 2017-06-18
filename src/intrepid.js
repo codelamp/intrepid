@@ -2194,7 +2194,7 @@ intrepid.instance = intrepid.base.extend({
           setMatcher(segment);
         }
       }
-      console.log('####', '' + segment, '' + match, '' + method);
+      //console.log('####', '' + segment, '' + match, '' + method);
       // if the segment isn't a function, loop back
       if ( !segment.call ) continue;
       // find can operate forwards or backwards and can work directly with the next
@@ -2370,11 +2370,6 @@ intrepid.simpleQuery = intrepid.queryInterface.extend({
       break;
       default:
         switch ( true ) {
-          case (segment.charAt(0) == '@'):
-
-
-
-          break;
           default:
             var item = function(val, key, par){ return key === segment; };
             item.toString = function(){
