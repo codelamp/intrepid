@@ -416,6 +416,17 @@ intrepid.base = {
   },
 
   /**
+   * Returns a function that will create an instance using .create()
+   *
+   * @memberof intrepid.base
+   * @instance
+   * @chainable
+   */
+  callable: function(n){
+    return this[n||'create'].bind(this);
+  },
+
+  /**
    * Prepare each instance created by .create()
    *
    * @memberof intrepid.base
@@ -2291,6 +2302,19 @@ intrepid.instance = intrepid.base.extend({
 intrepid.simpleQuery = intrepid.queryInterface.extend({
 
   /**
+   * Create an instance, but use all the args to make a selector
+   *
+   * @memberof intrepid.queryInterface
+   * @chainable
+   * @static
+   */
+  createSpread: function(){
+    var selector = [];
+    for ( var i=0, l=arguments.length; i<l; i++ ) { selector.push(arguments[i]); };
+    return this.prep.call(Object.create(this), selector);
+  },
+
+  /**
    * The process function for simpleQuery, takes an array selector of simple
    * items and converts them into filter functions, matchers and directives
    * that the navigation system will understand.
@@ -2467,7 +2491,7 @@ intrepid.dataHandlers.add('obj', 1000, {
    * @memberof examples.dataHandlers.obj
    */
   hasAttribute: function(ref, attr, valuehj){
-
+    return false; // @TODO:
   },
   /**
    * Called when an attribute
@@ -2475,7 +2499,7 @@ intrepid.dataHandlers.add('obj', 1000, {
    * @memberof examples.dataHandlers.obj
    */
   attribute: function(ref, attr, value){
-
+    return []; // @TODO:
   },
   /**
    * Detect if the current targets have children, in terms of js objects
@@ -2593,9 +2617,17 @@ return (exports.intrepid = intrepid);
 
 }))); // end export
 /*
-// set-up hidden extra
+// easter egg set-up
 var b=document.body, c=document.createElement('canvas'), a=c.getContext('2d'); document.documentElement.appendChild(c);
 // start 1Kb
-d=document;l='length';z=0;y='fillStyle';v=10;w=500;P={x:0,y:0,h:0,v:0,s:1};K={};L=[];n='';m=Math;A=m.abs;r='return ';f='function (',F=function(_,$){return eval('_='+f+($?_.split(n):n)+'){'+($?$:_)+'}')};S=[];Q=F('bc','c=m.random();'+r+'(b[l]?b[m.floor(b[l]*c)]:c*b)');T=F('bcdef','a.font=(f?f:1)+"em arial";a[y]=e;a.fillText(b,c,d);');M=F('O','g=a.getImageData(O.x+v,O.y,1,1);(g.data[2]?O.v=-2:n);(O.v<9?O.v+=0.3:n);O.y+=O.v;O.x+=O.h;(O.y>w?O.v=-O.v/2:n);O.y=m.min(O.y,w+v)');K=F('Oi','(A(O.x-5-P.x)<12&&A(O.y-P.y)<8?(S[i]=n)|z++:n)');C=F('bcdef','a[y]=f;a.fillRect(b,c,d,e);');P.x=Q(w);P.y=Q(w);c.width=c.height=w;setInterval(F('b=(K[68]?1:(K[65]?-1:0));(b&A(P.h)<4?P.h+=1*b:P.h/=1.5);(P.s==1&&K[87]?P.v=-5:n);M(P);C(0,0,w,w,"#000");T("☻",P.x,P.y,"#0A0",1.5);T(z,v,20);for(i=20;i--;){(!L[0]?L[i]=["☁",Q(w),Q(w),"#fff",Q(4)+2]:n);T.apply(n,L[i])};for(i=v;i--;){s=(!S[i]?S[i]={i:Q("★♥"),x:Q(w-v),y:0,h:0,v:0}:S[i]);M(s);K(s,i);T(s.i,s.x,s.y,"#fd0")}'),25);d.onkeydown=d.onkeyup=F('e','K[e.keyCode]=(e.type[l]==7);'+r+'0');
+d=document;l='length';z=0;y='fillStyle';v=10;w=500;P={x:0,y:0,h:0,v:0,s:1};K={};L=[];n='';m=Math;A=m.abs;r='return ';
+f='function (',F=function(_,$){return eval('_='+f+($?_.split(n):n)+'){'+($?$:_)+'}')};S=[];Q=F('bc','c=m.random();'+r+
+'(b[l]?b[m.floor(b[l]*c)]:c*b)');T=F('bcdef','a.font=(f?f:1)+"em arial";a[y]=e;a.fillText(b,c,d);');M=F('O',
+'g=a.getImageData(O.x+v,O.y,1,1);(g.data[2]?O.v=-2:n);(O.v<9?O.v+=0.3:n);O.y+=O.v;O.x+=O.h;(O.y>w?O.v=-O.v/2:n);O.y=m.min(O.y,w+v)');
+K=F('Oi','(A(O.x-5-P.x)<12&&A(O.y-P.y)<8?(S[i]=n)|z++:n)');C=F('bcdef','a[y]=f;a.fillRect(b,c,d,e);');P.x=Q(w);P.y=Q(w);c.width=c.height=w;
+setInterval(F('b=(K[68]?1:(K[65]?-1:0));(b&A(P.h)<4?P.h+=1*b:P.h/=1.5);(P.s==1&&K[87]?P.v=-5:n);M(P);C(0,0,w,w,"#000");T("☻",P.x,P.y,"#0A0",1.5);'+
+'T(z,v,20);for(i=20;i--;){(!L[0]?L[i]=["☁",Q(w),Q(w),"#fff",Q(4)+2]:n);'+
+'T.apply(n,L[i])};for(i=v;i--;){s=(!S[i]?S[i]={i:Q("★♥"),x:Q(w-v),y:0,h:0,v:0}:S[i]);'+
+'M(s);K(s,i);T(s.i,s.x,s.y,"#fd0")}'),25);d.onkeydown=d.onkeyup=F('e','K[e.keyCode]=(e.type[l]==7);'+r+'0');
 // end 1Kb
 */
